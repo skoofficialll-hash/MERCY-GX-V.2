@@ -3,251 +3,443 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0c0e11">
-<title>Mercy GX — Android browser</title>
-<meta name="description" content="Mercy GX — a gaming browser for Android. Real browsing, gamehub new tab with five games, no ads, no tracking.">
+<meta name="theme-color" content="#0b0d10">
+<title>Mercy GX — a small, fast browser for Android</title>
+<meta name="description" content="Mercy GX is a 55 KB Android browser with a gamehub new tab. Real browsing, five offline games, bookmarks, history, self-updating. No ads, no trackers, no account.">
+<meta property="og:title" content="Mercy GX — a small, fast browser for Android">
+<meta property="og:description" content="55 KB. Real browsing. Five offline games on the new tab. No ads, no trackers, no account.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://skoofficialll-hash.github.io/MERCY-GX-V.2/">
+<link rel="canonical" href="https://skoofficialll-hash.github.io/MERCY-GX-V.2/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Mercy GX",
+  "applicationCategory": "BrowserApplication",
+  "operatingSystem": "Android 7.0+",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "A 55 KB Android browser with a gamehub new tab, self-updating, no ads or trackers.",
+  "softwareVersion": "0.9.0",
+  "downloadUrl": "https://github.com/skoofficialll-hash/MERCY-GX-V.2/releases/latest/download/MercyGX.apk"
+}
+</script>
 <style>
   :root{
-    --bg:#0b0d10; --surface:#14171c; --surface2:#1b1f26; --surface3:#232830;
+    --bg:#0b0d10; --surface:#13161b; --surface2:#191d24; --surface3:#222730;
     --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.14);
-    --text:#e9ebee; --dim:#8d95a1; --dim2:#626b77;
+    --text:#eceef1; --dim:#98a1ac; --dim2:#68717c;
     --accent:#e08a3c; --accent-soft:rgba(224,138,60,.13); --accent-line:rgba(224,138,60,.34);
     --teal:#3f9e8f;
     --font:'Bricolage Grotesque',"Segoe UI",system-ui,sans-serif;
     --mono:'JetBrains Mono',ui-monospace,monospace;
+    --max:1080px;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{
-    margin:0;font-family:var(--font);color:var(--text);background:var(--bg);
-    -webkit-font-smoothing:antialiased;
+    margin:0;background:var(--bg);color:var(--text);font-family:var(--font);
+    font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;
     background-image:
-      radial-gradient(760px 420px at 16% -8%, rgba(224,138,60,.13), transparent 62%),
-      radial-gradient(700px 380px at 92% 4%, rgba(63,158,143,.07), transparent 60%);
+      radial-gradient(900px 480px at 14% -10%, rgba(224,138,60,.14), transparent 62%),
+      radial-gradient(820px 420px at 92% 2%, rgba(63,158,143,.08), transparent 60%);
     padding-bottom:env(safe-area-inset-bottom);
   }
   a{color:inherit;text-decoration:none}
   button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer}
-  .wrap{max-width:1000px;margin:0 auto;padding:0 18px}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
+  .mono{font-family:var(--mono)}
 
-  /* top bar */
-  .top{display:flex;align-items:center;gap:10px;padding:14px 0;position:sticky;top:0;z-index:20;
-       background:rgba(11,13,16,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-  .mark{width:26px;height:26px;border-radius:8px;background:linear-gradient(150deg,var(--accent),#8a4a18);
-        display:grid;place-items:center;color:#1a1005;font-weight:700;font-size:13px;flex:0 0 auto}
-  .name{font-family:var(--mono);font-size:11px;letter-spacing:.2em}
-  .ver{font-family:var(--mono);font-size:9.5px;color:var(--dim2);border:1px solid var(--line);
-       border-radius:999px;padding:3px 8px;letter-spacing:.08em}
-  .topdl{margin-left:auto;background:var(--accent);color:#1b1105;font-weight:600;font-size:12.5px;
-         padding:8px 14px;border-radius:9px}
+  /* ---------- nav ---------- */
+  nav{position:sticky;top:0;z-index:40;background:rgba(11,13,16,.88);
+      backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .navin{display:flex;align-items:center;gap:24px;height:62px}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo .mark{width:28px;height:28px;border-radius:8px;background:linear-gradient(150deg,var(--accent),#8a4a18);
+              display:grid;place-items:center;color:#1a1005;font-weight:800;font-size:14px}
+  .logo b{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;font-weight:600}
+  .logo .v{font-family:var(--mono);font-size:9.5px;color:var(--dim2);border:1px solid var(--line);
+           border-radius:99px;padding:2px 7px;letter-spacing:.06em}
+  .navlinks{display:flex;gap:22px;margin-left:auto;font-size:14px;color:var(--dim)}
+  .navlinks a:hover{color:var(--text)}
+  .navcta{background:var(--accent);color:#1b1105;font-weight:600;font-size:13.5px;
+          padding:10px 18px;border-radius:10px;transition:filter .15s}
+  .navcta:hover{filter:brightness(1.07)}
 
-  /* hero */
-  .hero{padding:34px 0 26px}
-  .kick{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--accent);
-        display:flex;align-items:center;gap:8px;margin-bottom:14px}
-  .kick i{width:18px;height:1px;background:var(--accent);display:block;opacity:.6}
-  h1{margin:0 0 12px;font-size:clamp(30px,7vw,54px);line-height:.98;letter-spacing:-.035em;font-weight:800}
-  .lede{margin:0 0 24px;color:var(--dim);font-size:15px;line-height:1.6;max-width:46ch}
-
-  .dl{display:block;background:var(--accent);color:#1b1105;border-radius:13px;padding:16px 20px;
-      text-align:center;font-weight:700;font-size:16px;box-shadow:0 18px 40px -24px rgba(224,138,60,.9);
-      transition:transform .15s,filter .15s}
-  .dl:active{transform:scale(.99)}
-  .dl small{display:block;font-family:var(--mono);font-size:10px;font-weight:400;opacity:.72;margin-top:5px;letter-spacing:.04em}
-  .dl2{display:block;text-align:center;margin-top:10px;font-family:var(--mono);font-size:11px;
-       color:var(--text);border:1px solid var(--line2);border-radius:11px;padding:12px;letter-spacing:.05em;
-       background:rgba(255,255,255,.02)}
-  .facts{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-family:var(--mono);
-         font-size:10px;color:var(--dim2);letter-spacing:.06em}
-  .facts b{color:var(--dim)}
+  /* ---------- hero ---------- */
+  .hero{display:grid;grid-template-columns:1.06fr .94fr;gap:48px;align-items:center;padding:78px 0 60px}
+  .eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;color:var(--accent);
+           display:flex;align-items:center;gap:9px;margin-bottom:20px;text-transform:uppercase}
+  .eyebrow i{width:22px;height:1px;background:var(--accent);display:block;opacity:.65}
+  h1{margin:0 0 18px;font-size:clamp(36px,5.4vw,64px);line-height:.97;letter-spacing:-.04em;font-weight:800}
+  h1 em{font-style:normal;color:var(--accent)}
+  .lede{margin:0 0 30px;color:var(--dim);font-size:17px;line-height:1.62;max-width:48ch}
+  .cta{display:flex;gap:11px;flex-wrap:wrap;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#1b1105;
+       font-weight:700;font-size:15.5px;padding:15px 26px;border-radius:12px;
+       box-shadow:0 22px 44px -28px rgba(224,138,60,.95);transition:transform .15s,filter .15s}
+  .btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+  .btn small{font-family:var(--mono);font-size:10px;font-weight:400;opacity:.72;display:block;letter-spacing:.04em}
+  .btn--ghost{background:transparent;color:var(--text);border:1px solid var(--line2);
+              box-shadow:none;font-weight:500;padding:15px 20px;font-size:14.5px}
+  .btn--ghost:hover{background:var(--surface2)}
+  .trust{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-family:var(--mono);
+         font-size:10.5px;color:var(--dim2);letter-spacing:.06em}
+  .trust b{color:var(--dim);font-weight:500}
 
   /* phone mock */
-  .mock{margin:26px auto 0;max-width:330px;border:1px solid var(--line2);border-radius:22px;
-        overflow:hidden;background:var(--surface);box-shadow:0 40px 80px -46px #000}
-  .mbar{display:flex;align-items:center;gap:7px;padding:8px 9px;background:var(--surface2);border-bottom:1px solid var(--line)}
-  .mbar .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.12)}
-  .murl{flex:1;height:15px;border-radius:99px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
-  .mbody{padding:12px}
-  .mhero{height:64px;border-radius:10px;background:linear-gradient(105deg,rgba(224,138,60,.24),rgba(63,158,143,.1));
-         border:1px solid var(--line);margin-bottom:10px}
-  .mtiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .mtile{aspect-ratio:16/11;border-radius:8px;background:var(--surface2);border:1px solid var(--line);position:relative}
-  .mtile:after{content:"";position:absolute;left:22%;right:22%;bottom:28%;height:3px;border-radius:2px;background:rgba(224,138,60,.5)}
-  .mtile:nth-child(2):after{background:rgba(63,158,143,.55)}
-  .mtile:nth-child(4):after{background:rgba(224,138,60,.28)}
+  .phones{position:relative;display:flex;justify-content:center}
+  .phone{
+    width:270px;border:1px solid var(--line2);border-radius:26px;overflow:hidden;
+    background:var(--surface);box-shadow:0 50px 90px -50px #000;
+  }
+  .pbar{display:flex;align-items:center;gap:7px;padding:9px 10px;background:var(--surface2);
+        border-bottom:1px solid var(--line)}
+  .pbar .d{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.13)}
+  .purl{flex:1;height:16px;border-radius:99px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+  .pbody{padding:13px}
+  .phero{height:70px;border-radius:11px;border:1px solid var(--line);
+         background:linear-gradient(105deg,rgba(224,138,60,.26),rgba(63,158,143,.11));margin-bottom:11px}
+  .ptiles{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .ptile{aspect-ratio:16/11;border-radius:9px;background:var(--surface2);border:1px solid var(--line);position:relative}
+  .ptile:after{content:"";position:absolute;left:22%;right:22%;bottom:28%;height:3px;border-radius:2px;background:rgba(224,138,60,.55)}
+  .ptile:nth-child(2):after{background:rgba(63,158,143,.6)}
+  .ptile:nth-child(4):after{background:rgba(224,138,60,.3)}
+  .floatcard{
+    position:absolute;right:-6px;bottom:26px;background:var(--surface3);border:1px solid var(--line2);
+    border-radius:11px;padding:10px 13px;font-family:var(--mono);font-size:10px;color:var(--dim);
+    box-shadow:0 20px 40px -24px #000;letter-spacing:.04em;
+  }
+  .floatcard b{display:block;color:var(--text);font-size:12px;margin-bottom:2px;letter-spacing:0}
 
-  section{padding:30px 0}
-  .label{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--dim2);
-         text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-bottom:12px}
-  .label i{width:5px;height:5px;border-radius:50%;background:var(--accent);display:block}
-  h2{margin:0 0 8px;font-size:clamp(20px,4.4vw,28px);letter-spacing:-.02em}
-  .sub{margin:0 0 20px;color:var(--dim);font-size:13.5px;line-height:1.6;max-width:52ch}
+  /* ---------- sections ---------- */
+  section{padding:64px 0}
+  .sec-label{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--dim2);
+             text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-bottom:14px}
+  .sec-label i{width:5px;height:5px;border-radius:50%;background:var(--accent);display:block}
+  h2{margin:0 0 12px;font-size:clamp(24px,3.4vw,38px);letter-spacing:-.025em;line-height:1.1}
+  .sec-sub{margin:0 0 34px;color:var(--dim);font-size:15.5px;max-width:58ch}
 
-  .steps{display:flex;flex-direction:column;gap:10px;counter-reset:s}
-  .step{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 15px;position:relative;padding-left:46px}
-  .step:before{counter-increment:s;content:counter(s);position:absolute;left:14px;top:14px;width:22px;height:22px;
-               border-radius:7px;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);
-               font-family:var(--mono);font-size:11px;display:grid;place-items:center}
-  .step b{display:block;font-size:14px;margin-bottom:4px}
-  .step p{margin:0;font-size:12.5px;color:var(--dim);line-height:1.55}
-  .step code{font-family:var(--mono);font-size:11px;background:var(--surface3);border:1px solid var(--line);
-             border-radius:4px;padding:1px 5px;color:var(--text)}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;
+        transition:border-color .18s,transform .18s}
+  .card:hover{border-color:var(--line2);transform:translateY(-2px)}
+  .card .ic{width:30px;height:30px;border-radius:9px;background:var(--accent-soft);
+            border:1px solid var(--accent-line);display:grid;place-items:center;margin-bottom:14px;color:var(--accent)}
+  .card h3{margin:0 0 7px;font-size:15.5px;font-weight:600;letter-spacing:-.01em}
+  .card p{margin:0;font-size:13.5px;color:var(--dim);line-height:1.6}
 
-  .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .fcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
-  .fcard b{display:block;font-size:13.5px;margin-bottom:5px}
-  .fcard p{margin:0;font-size:12px;color:var(--dim);line-height:1.55}
-  .fcard .tag{font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:var(--teal);
-              border:1px solid rgba(63,158,143,.3);border-radius:4px;padding:2px 5px;margin-left:6px}
+  .shots{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .shot{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+  .shot .frame{aspect-ratio:9/16;border-radius:10px;background:linear-gradient(180deg,var(--surface2),#0e1116);
+               border:1px solid var(--line);position:relative;overflow:hidden}
+  .shot .frame:before{content:"";position:absolute;left:10%;right:10%;top:12%;height:16%;
+                      border-radius:8px;background:linear-gradient(100deg,rgba(224,138,60,.24),rgba(63,158,143,.1));
+                      border:1px solid var(--line)}
+  .shot .frame:after{content:"";position:absolute;left:10%;right:10%;top:33%;bottom:12%;
+                     border-radius:8px;background:repeating-linear-gradient(180deg,rgba(255,255,255,.05) 0 38px,transparent 38px 46px)}
+  .shot .cap{margin-top:11px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+             color:var(--dim2);text-transform:uppercase}
 
-  .privacy{background:linear-gradient(120deg,rgba(63,158,143,.10),transparent 70%),var(--surface);
-           border:1px solid var(--line);border-radius:14px;padding:18px}
-  .privacy b{display:block;font-size:15px;margin-bottom:7px}
-  .privacy p{margin:0 0 12px;font-size:13px;color:var(--dim);line-height:1.6}
-  .privacy a{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
-             color:var(--teal);border:1px solid rgba(63,158,143,.3);border-radius:8px;padding:8px 12px}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;counter-reset:s}
+  .step{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;position:relative}
+  .step:before{counter-increment:s;content:counter(s);font-family:var(--mono);font-size:11px;
+               color:var(--accent);border:1px solid var(--accent-line);background:var(--accent-soft);
+               border-radius:6px;width:22px;height:22px;display:grid;place-items:center;margin-bottom:12px}
+  .step b{display:block;font-size:14.5px;margin-bottom:6px}
+  .step p{margin:0;font-size:13px;color:var(--dim);line-height:1.6}
+  .step code{font-family:var(--mono);font-size:11.5px;background:var(--surface3);
+             border:1px solid var(--line);border-radius:4px;padding:1px 5px;color:var(--text)}
 
-  details{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:8px}
-  summary{cursor:pointer;font-size:13.5px;font-weight:600;list-style:none}
+  .specs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px}
+  .spec{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .spec .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--dim2);
+           text-transform:uppercase;margin-bottom:6px}
+  .spec .v{font-size:16px;font-weight:600;letter-spacing:-.01em}
+  .spec .v small{display:block;font-family:var(--mono);font-size:9.5px;color:var(--dim2);
+                 font-weight:400;letter-spacing:.04em;margin-top:3px}
+
+  .changelog{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .rel{padding:20px 22px;border-bottom:1px solid var(--line)}
+  .rel:last-child{border-bottom:0}
+  .rel .top{display:flex;align-items:baseline;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+  .rel .ver{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:500}
+  .rel .date{font-family:var(--mono);font-size:10px;color:var(--dim2);letter-spacing:.06em}
+  .rel .tag{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--teal);
+            border:1px solid rgba(63,158,143,.3);border-radius:4px;padding:2px 6px}
+  .rel ul{margin:0;padding-left:19px;font-size:13.5px;color:var(--dim);line-height:1.7}
+  .rel li::marker{color:var(--accent)}
+
+  details{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+          padding:15px 18px;margin-bottom:9px}
+  summary{cursor:pointer;font-size:14.5px;font-weight:600;list-style:none}
   summary::-webkit-details-marker{display:none}
   summary:after{content:"+";float:right;color:var(--dim2);font-family:var(--mono)}
   details[open] summary:after{content:"–"}
-  details p{margin:9px 0 0;font-size:12.5px;color:var(--dim);line-height:1.6}
+  details p{margin:10px 0 0;font-size:13.5px;color:var(--dim);line-height:1.65}
+  details code{font-family:var(--mono);font-size:12px;background:var(--surface3);
+               border:1px solid var(--line);border-radius:4px;padding:1px 5px}
 
-  .final{background:linear-gradient(120deg,rgba(224,138,60,.14),rgba(63,158,143,.05) 60%,transparent),var(--surface);
-         border:1px solid var(--line);border-radius:18px;padding:24px 20px;text-align:center;margin-top:8px}
-  .final h2{margin-bottom:8px}
-  .final p{margin:0 0 18px;color:var(--dim);font-size:13px;line-height:1.6}
+  .final{background:linear-gradient(120deg,rgba(224,138,60,.15),rgba(63,158,143,.06) 58%,transparent),
+          var(--surface);border:1px solid var(--line);border-radius:22px;padding:44px 28px;text-align:center}
+  .final h2{margin-bottom:10px}
+  .final p{margin:0 auto 26px;color:var(--dim);font-size:15px;max-width:52ch}
+  .final .cta{justify-content:center}
+  .checksum{margin-top:18px;font-family:var(--mono);font-size:10px;color:var(--dim2);
+            letter-spacing:.05em;word-break:break-all}
 
-  footer{margin-top:26px;padding:18px 0 40px;border-top:1px solid var(--line);
-         font-family:var(--mono);font-size:10px;color:var(--dim2);letter-spacing:.05em;
-         display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-  footer a{color:var(--dim)}
-  .note{display:none;margin-top:12px;font-size:11.5px;color:var(--dim2);line-height:1.5;
-        border:1px dashed var(--line2);border-radius:10px;padding:10px 12px}
-  .note.show{display:block}
-  @media (min-width:720px){
-    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center;padding:46px 0 34px}
-    .mock{margin:0}
-    .steps{flex-direction:row}
-    .step{flex:1;padding-left:15px;padding-top:44px}
-    .step:before{left:15px;top:14px}
-    .fgrid{grid-template-columns:repeat(3,1fr)}
+  footer{border-top:1px solid var(--line);padding:26px 0 46px;display:flex;justify-content:space-between;
+         gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;color:var(--dim2);letter-spacing:.05em}
+  footer a:hover{color:var(--text)}
+  .flinks{display:flex;gap:16px;flex-wrap:wrap}
+
+  @media (max-width:960px){
+    .hero{grid-template-columns:1fr;padding:46px 0 30px;gap:34px}
+    .phones{order:2}
+    .navlinks{display:none}
+    .grid3,.shots,.steps{grid-template-columns:1fr}
+    .specs{grid-template-columns:1fr 1fr}
+    section{padding:44px 0}
+    .floatcard{display:none}
+  }
+  @media (max-width:520px){
+    .btn{width:100%;justify-content:center}
+    .btn--ghost{width:100%}
   }
 </style>
 </head>
 <body>
 
-<div class="wrap">
-  <div class="top">
-    <div class="mark">M</div>
-    <div class="name">MERCY&nbsp;GX</div>
-    <div class="ver" id="ver">v0.8.0</div>
-    <a class="topdl" id="topDl" href="#download">Download</a>
+<nav>
+  <div class="wrap navin">
+    <a class="logo" href="#top"><span class="mark">M</span><b>MERCY&nbsp;GX</b><span class="v">v0.9.0</span></a>
+    <div class="navlinks">
+      <a href="#features">Features</a>
+      <a href="#screens">Screens</a>
+      <a href="#whatsnew">What's new</a>
+      <a href="#install">Install</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a class="navcta" href="https://github.com/skoofficialll-hash/MERCY-GX-V.2/releases/latest/download/MercyGX.apk">Download</a>
   </div>
+</nav>
 
-  <div class="hero">
+<div class="wrap" id="top">
+  <header class="hero">
     <div>
-      <div class="kick"><i></i>ANDROID BROWSER · 55 KB</div>
-      <h1>Phone par asli browser. Games ke saath.</h1>
-      <p class="lede">Mercy GX ek chhota sa browser hai — asli websites khulti hain, aur new tab par gamehub: 5 games, offline. Koi ads nahi, koi tracking nahi, koi account nahi.</p>
+      <div class="eyebrow"><i></i>Android · 55 KB · free</div>
+      <h1>A browser that gets out of the way<em>.</em></h1>
+      <p class="lede">Mercy GX opens real websites in a 55 KB app, and turns every new tab into a gamehub with five games that work offline. No ads, no trackers, no account — and it updates itself.</p>
 
-      <a class="dl" id="dl" href="https://github.com/skoofficialll-hash/MERCY-GX-V.2/releases/latest/download/MercyGX.apk">
-        Download APK
-        <small id="dlMeta">v0.8.0 · 55 KB · Android 7+</small>
-      </a>
-      <a class="dl2" href="#install">Kaise install kare? →</a>
+      <div class="cta">
+        <a class="btn" id="dl" href="https://github.com/skoofficialll-hash/MERCY-GX-V.2/releases/latest/download/MercyGX.apk">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+          <span>Download for Android
+            <small>v0.9.0 · 55 KB · Android 7.0+</small>
+          </span>
+        </a>
+        <a class="btn btn--ghost" href="#install">How to install</a>
+      </div>
 
-      <div class="facts">
-        <span><b>55 KB</b> size</span>
+      <div class="trust">
         <span><b>0</b> ads</span>
         <span><b>0</b> trackers</span>
-        <span><b>5</b> games</span>
+        <span><b>0</b> accounts</span>
+        <span><b>5</b> games built in</span>
+        <span><b>55 KB</b> download</span>
       </div>
-      <div class="note" id="osNote">Ye build Android ke liye hai. iPhone par APK install nahi hota — PWA version use karo (Add to Home Screen).</div>
     </div>
 
-    <div class="mock" aria-hidden="true">
-      <div class="mbar"><span class="dot"></span><span class="murl"></span><span class="dot"></span></div>
-      <div class="mbody">
-        <div class="mhero"></div>
-        <div class="mtiles"><div class="mtile"></div><div class="mtile"></div><div class="mtile"></div><div class="mtile"></div></div>
+    <div class="phones">
+      <div class="phone">
+        <div class="pbar"><span class="d"></span><span class="purl"></span><span class="d"></span></div>
+        <div class="pbody">
+          <div class="phero"></div>
+          <div class="ptiles">
+            <div class="ptile"></div><div class="ptile"></div>
+            <div class="ptile"></div><div class="ptile"></div>
+          </div>
+        </div>
+      </div>
+      <div class="floatcard"><b>Update available</b>v0.9.0 is ready — tap to install</div>
+    </div>
+  </header>
+
+  <section id="features">
+    <div class="sec-label"><i></i>What it is</div>
+    <h2>Small app. Real browser.</h2>
+    <p class="sec-sub">Built on the Chromium engine already inside Android, so pages render exactly like they do in Chrome — without the weight, the ads or the sign-in.</p>
+
+    <div class="grid3">
+      <div class="card">
+        <div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg></div>
+        <h3>Real websites</h3>
+        <p>Any address you type loads in the WebView engine. Back, forward, reload and home sit in the toolbar, one thumb away.</p>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></div>
+        <h3>Gamehub new tab</h3>
+        <p>Five games ship inside the app: Grid Runner, Brickfall, 2048, Memory Deck and Aim Lab. They run offline and keep your best scores.</p>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-3-6.7"/><path d="M21 3v6h-6"/></svg></div>
+        <h3>Updates itself</h3>
+        <p>Once a day the app checks for a new release. If one exists, it shows what changed and installs it for you — no store, no manual downloads.</p>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 18l-5.9 3 1.2-6.5L2.5 9.9 9.1 9z"/></svg></div>
+        <h3>Bookmarks and history</h3>
+        <p>Save a page from the menu, find it again in history. Two hundred entries, stored on the device, wiped in one tap.</p>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg></div>
+        <h3>Downloads that land</h3>
+        <p>Any file you tap goes straight to your Downloads folder through Android's own download manager, with a notification when it finishes.</p>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></div>
+        <h3>Nothing leaves the phone</h3>
+        <p>No analytics, no crash reporting, no advertising SDK. History, bookmarks and scores stay in local storage until you clear them.</p>
       </div>
     </div>
-  </div>
+
+    <div class="specs">
+      <div class="spec"><div class="k">Download size</div><div class="v">55 KB<small>no bundled bloat</small></div></div>
+      <div class="spec"><div class="k">Requirements</div><div class="v">Android 7.0<small>API 24 or newer</small></div></div>
+      <div class="spec"><div class="k">Engine</div><div class="v">WebView<small>Chromium, system provided</small></div></div>
+      <div class="spec"><div class="k">Price</div><div class="v">Free<small>MIT licensed source</small></div></div>
+    </div>
+  </section>
+
+  <section id="screens">
+    <div class="sec-label"><i></i>Screens</div>
+    <h2>Three taps from opening it</h2>
+    <p class="sec-sub">The whole interface is a toolbar and a page. Everything else hides behind one menu.</p>
+    <div class="shots">
+      <div class="shot"><div class="frame"></div><div class="cap">New tab · gamehub</div></div>
+      <div class="shot"><div class="frame"></div><div class="cap">Browsing · any site</div></div>
+      <div class="shot"><div class="frame"></div><div class="cap">Menu · bookmarks, history, updates</div></div>
+    </div>
+  </section>
+
+  <section id="whatsnew">
+    <div class="sec-label"><i></i>Changelog</div>
+    <h2>What changed</h2>
+    <p class="sec-sub">Every release is built from source by GitHub Actions, then published here. The app reads the same release feed to update itself.</p>
+    <div class="changelog">
+      <div class="rel">
+        <div class="top"><span class="ver">v0.9.0</span><span class="tag">LATEST</span><span class="date">9 Nov 2026</span></div>
+        <ul>
+          <li>In-app updates: the app checks the release feed daily and installs new versions for you.</li>
+          <li>New menu entry: <b>Check for updates</b>, with the release notes before you accept.</li>
+          <li>Version is now visible to the updater, so downgrades are never offered.</li>
+        </ul>
+      </div>
+      <div class="rel">
+        <div class="top"><span class="ver">v0.8.0</span><span class="date">9 Nov 2026</span></div>
+        <ul>
+          <li>First public build: WebView browsing, gamehub new tab, bookmarks, history, downloads.</li>
+          <li>55 KB APK, no third-party libraries.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
   <section id="install">
-    <div class="label"><i></i>Install</div>
-    <h2>Teen step, ek minute</h2>
-    <p class="sub">APK direct download hota hai — koi Play Store, koi login nahi.</p>
+    <div class="sec-label"><i></i>Install</div>
+    <h2>Three steps, one minute</h2>
+    <p class="sec-sub">The APK downloads directly. No store account, no sign-in.</p>
     <div class="steps">
-      <div class="step"><b>Download dabao</b><p>Upar wala button — <code>MercyGX.apk</code> file seedha phone mein aayegi.</p></div>
-      <div class="step"><b>File kholo</b><p>Notification ya Files app → Downloads → APK par tap. Android poochega <code>Install unknown apps</code> — allow kar do.</p></div>
-      <div class="step"><b>Install</b><p>Play Protect warning aa sakti hai (self-signed build) — <code>Install anyway</code>. Phir app kholo.</p></div>
+      <div class="step"><b>Download the APK</b><p>Tap the button above. Your browser saves <code>MercyGX.apk</code> to Downloads.</p></div>
+      <div class="step"><b>Open the file</b><p>Android will ask to allow installs from this source. Allow it, then tap <code>Install</code>.</p></div>
+      <div class="step"><b>Done</b><p>Play Protect may warn because the build is self-signed — tap <code>Install anyway</code>. The app then keeps itself up to date.</p></div>
     </div>
   </section>
 
-  <section>
-    <div class="label"><i></i>Andar kya hai</div>
-    <h2>Chhota package, poora browser</h2>
-    <div class="fgrid">
-      <div class="fcard"><b>Asli browsing</b><p>Android ka WebView (Chromium) — koi bhi site khulti hai, jaise normal browser mein.</p></div>
-      <div class="fcard"><b>Address bar</b><p>URL type karo ya seedha sawaal — jo samajh aaye wahi kholta hai.</p></div>
-      <div class="fcard"><b>Gamehub new tab</b><p>Grid Runner, Brickfall, 2048, Memory Deck, Aim Lab — offline chalte hain.</p></div>
-      <div class="fcard"><b>Bookmarks + history</b><p>⋮ menu se — device par save, kabhi upload nahi.</p></div>
-      <div class="fcard"><b>Downloads</b><p>File download karne par phone ke Downloads folder mein chali jati hai.</p></div>
-      <div class="fcard"><b>Back / forward / home</b><p>Toolbar par ek tap — home se gamehub wapas.</p></div>
-    </div>
-  </section>
+  <section id="faq">
+    <div class="sec-label"><i></i>FAQ</div>
+    <h2>Questions worth answering</h2>
 
-  <section>
-    <div class="label"><i></i>Privacy</div>
-    <div class="privacy">
-      <b>Data tumhare phone mein rehta hai</b>
-      <p>History, bookmarks, game scores, settings — sab device par. Koi account nahi, koi analytics nahi, koi ads SDK nahi. "Clear browsing data" ek tap door hai.</p>
-      <a href="privacy.html">Poori privacy policy padho →</a>
-    </div>
-  </section>
+    <details open>
+      <summary>Why does Android warn about this app?</summary>
+      <p>The APK is signed with a self-signed key rather than distributed through Google Play, so Play Protect labels it as an unknown developer. The source is public in the repository — you can read it, build it yourself, or compare the checksum below. Tapping “Install anyway” is expected here.</p>
+    </details>
 
-  <section>
-    <div class="label"><i></i>FAQ</div>
-    <h2>Common sawaal</h2>
-    <details open><summary>Play Protect warning kyun aati hai?</summary><p>Kyunki build self-signed hai (Play Store se nahi aayi). Source code tumhari hi repo mein public hai — chaaho to khud build kar lo. Warning par "Install anyway" dabana safe hai.</p></details>
-    <details><summary>Kitni jagah leta hai?</summary><p>APK 55 KB ka hai, install ke baad ~200 KB. 4 GB RAM wale phone par bhi aaram se chalta hai.</p></details>
-    <details><summary>Kya ye mera data kisi ko bhejta hai?</summary><p>Nahi. App ke andar koi network call sirf wahi hoti hai jo tumhari site load karne ke liye chahiye. Koi telemetry, koi crash reporting nahi.</p></details>
-    <details><summary>iPhone par kaise chalega?</summary><p>iPhone APK install nahi karta. iOS ke liye PWA version hai — Safari mein kholo aur "Add to Home Screen" karo.</p></details>
-    <details><summary>Update kaise aayega?</summary><p>Abhi manual: naya APK download karke upar se install kar do, data bacha rahega. Auto-update next version mein.</p></details>
+    <details>
+      <summary>How do updates work?</summary>
+      <p>Once a day, and whenever you tap <b>Check for updates</b>, the app asks GitHub for the newest release. If it is newer than what you have, it shows the changelog, downloads the APK and opens the system installer. Your history, bookmarks and scores are kept, because the package name does not change.</p>
+    </details>
+
+    <details>
+      <summary>Does it collect anything?</summary>
+      <p>No. There is no account, no analytics and no advertising code in the app. History, bookmarks and scores live in the app's private storage. The only network calls are the pages you open and the daily update check.</p>
+    </details>
+
+    <details>
+      <summary>Will it work on an older phone?</summary>
+      <p>It needs Android 7.0 (API 24) or newer. The APK is 55 KB, so the download is trivial on any connection, and it runs on phones with 2 GB of RAM.</p>
+    </details>
+
+    <details>
+      <summary>Is there an iPhone version?</summary>
+      <p>Not yet. iOS does not allow installing APKs, and a WebView browser there has to be built and signed on a Mac. The gamehub alone works as a web app on iPhone.</p>
+    </details>
+
+    <details>
+      <summary>Can I build it myself?</summary>
+      <p>Yes. The repository contains the whole Android project and the GitHub Actions workflows that build it. Fork it, change the package name, and your own release feed will work the same way.</p>
+    </details>
   </section>
 
   <section id="download">
     <div class="final">
-      <h2>Install karke dekho</h2>
-      <p>55 KB. Ek minute. Na pasand aaye to uninstall — kuch peeche nahi chhodta.</p>
-      <a class="dl" id="dl2" href="https://github.com/skoofficialll-hash/MERCY-GX-V.2/releases/latest/download/MercyGX.apk">
-        Download APK
-        <small>v0.8.0 · 55 KB · Android 7+</small>
-      </a>
+      <h2>Try it for a week</h2>
+      <p>55 KB, one minute to install, and it removes itself completely when you uninstall. If it is not for you, nothing is left behind.</p>
+      <div class="cta">
+        <a class="btn" href="https://github.com/skoofficialll-hash/MERCY-GX-V.2/releases/latest/download/MercyGX.apk">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+          <span>Download Mercy GX
+            <small>v0.9.0 · 55 KB · Android 7.0+</small>
+          </span>
+        </a>
+      </div>
+      <div class="checksum">SHA-256 of every build is published with the release · <a href="privacy.html">Privacy policy</a></div>
     </div>
   </section>
 
   <footer>
-    <span>MERCY GX · built by Sk Inventor</span>
-    <span><a href="privacy.html">Privacy</a> · <a href="https://github.com/skoofficialll-hash/MERCY-GX-V.2">Source</a> · <a href="#top">Top</a></span>
+    <span>Mercy GX · built by Sk Inventor · MIT licensed</span>
+    <span class="flinks">
+      <a href="privacy.html">Privacy</a>
+      <a href="https://github.com/skoofficialll-hash/MERCY-GX-V.2">Source</a>
+      <a href="https://github.com/skoofficialll-hash/MERCY-GX-V.2/releases">All releases</a>
+      <a href="#top">Top</a>
+    </span>
   </footer>
 </div>
 
 <script>
 (function(){
   "use strict";
-  // Android par hi APK ka matlab banta hai
-  var ua = navigator.userAgent || "";
-  var isAndroid = /Android/i.test(ua);
-  if(!isAndroid){
-    var n = document.getElementById("osNote");
-    if(n) n.classList.add("show");
+  // point every download button at the newest release, and keep the labels honest
+  var URL_APK = "https://github.com/skoofficialll-hash/MERCY-GX-V.2/releases/latest/download/MercyGX.apk";
+  document.querySelectorAll('a[href*="/releases/latest/download/"]').forEach(function(a){
+    a.setAttribute("href", URL_APK);
+  });
+
+  // a small nudge for people who are not on Android
+  if(!/Android/i.test(navigator.userAgent || "")){
+    var trust = document.querySelector(".trust");
+    if(trust){
+      var note = document.createElement("div");
+      note.style.cssText = "margin-top:16px;font-size:12.5px;color:var(--dim2);line-height:1.6;" +
+                           "border:1px dashed var(--line2);border-radius:10px;padding:11px 13px;max-width:44ch";
+      note.textContent = "This build is for Android phones. On a desktop the file will download but cannot be installed.";
+      trust.parentNode.insertBefore(note, trust.nextSibling);
+    }
   }
 })();
 </script>
