@@ -75,8 +75,8 @@ jobs:
 
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.4.0
-          name: Mercy Lite 1.4.0 — small and fast
+          tag_name: v1.5.0
+          name: Mercy Lite 1.5.0 — small and fast
           body: |
             **Mercy Lite** — the small, fast build for everyday phones.
 
@@ -87,6 +87,9 @@ jobs:
             - New app icon
             - 150+ ad & tracker networks blocked
             - Tap the counter for a site security panel
+            - Incognito tabs, desktop site mode
+            - Security levels: off / on / pro (pro blocks JavaScript)
+            - Camera, microphone and app-launch links blocked
             - Search engine chooser in the address bar (Mercy, DuckDuckGo, Brave, Bing, Startpage, Ecosia)
           files: |
             out/MercyLite.apk
