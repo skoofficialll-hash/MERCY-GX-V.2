@@ -19,8 +19,15 @@ jobs:
       - run: |
           mkdir -p out
           cp "$PROJECT"/app/build/outputs/apk/debug/app-debug.apk out/MercyGX.apk
+      - name: publish apk to pages
+        run: |
+          cp out/MercyGX.apk ./MercyGX.apk
+          git config user.name "actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add MercyGX.apk
+          git diff --cached --quiet || (git commit -m "publish apk" && git push)
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: v0.8.0
-          name: Mercy GX 0.8.0
+          tag_name: v0.9.0
+          name: Mercy GX 0.9.0
           files: out/MercyGX.apk
