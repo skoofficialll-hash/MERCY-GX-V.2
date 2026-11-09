@@ -44,6 +44,14 @@ jobs:
           sed -i "s/GECKOVIEW_VERSION/$VER/" "$PROJECT/app/build.gradle"
           grep -n geckoview "$PROJECT/app/build.gradle"
 
+      - name: Clean duplicate resources
+        run: |
+          set -e
+          # a stray vector drawable with the same name as the PNG icon breaks the
+          # resource merger; drop it so any project zip builds cleanly
+          find "$PROJECT/app/src/main/res" -name "ic_launcher_foreground.xml" -print -delete || true
+          ls "$PROJECT/app/src/main/res/drawable"
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -74,8 +82,8 @@ jobs:
 
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: v2.2.0-pro
-          name: Mercy Pro 2.2 — GeckoView engine
+          tag_name: v2.2.1-pro
+          name: Mercy Pro 2.2.1 — GeckoView engine
           body: |
             **Mercy Pro** — the big build, for phones with 4 GB RAM or more.
 

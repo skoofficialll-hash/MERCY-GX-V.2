@@ -30,6 +30,14 @@ jobs:
           echo "PROJECT=$P" >> "$GITHUB_ENV"
           echo "project: $P"
 
+      - name: Clean duplicate resources
+        run: |
+          set -e
+          # a stray vector drawable with the same name as the PNG icon breaks the
+          # resource merger; drop it so any project zip builds cleanly
+          find "$PROJECT/app/src/main/res" -name "ic_launcher_foreground.xml" -print -delete || true
+          ls "$PROJECT/app/src/main/res/drawable"
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -67,8 +75,8 @@ jobs:
 
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.0
-          name: Mercy Lite 1.3.0 — small and fast
+          tag_name: v1.3.1
+          name: Mercy Lite 1.3.1 — small and fast
           body: |
             **Mercy Lite** — the small, fast build for everyday phones.
 
