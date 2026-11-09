@@ -1,0 +1,82 @@
+name: build-lite
+
+# Mercy Lite — the small, fast WebView browser.
+# Repo layout:  mercy_lite.zip  +  .github/workflows/build.yml
+# Actions -> build-lite -> Run workflow
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  lite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unzip the project
+        run: |
+          set -e
+          # fixed name on purpose: a repo may hold more than one project zip
+          ZIP="mercy_lite.zip"
+          if [ ! -f "$ZIP" ]; then echo "::error::mercy_lite.zip repo root mein nahi mila"; exit 1; fi
+          mkdir -p _src
+          unzip -q -o "$ZIP" -d _src
+          P=$(dirname "$(find _src -maxdepth 4 -name settings.gradle | head -n 1)")
+          echo "PROJECT=$P" >> "$GITHUB_ENV"
+          echo "project: $P"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Build APK
+        run: cd "$PROJECT" && gradle assembleDebug --no-daemon --stacktrace
+
+      - name: Collect APK
+        run: |
+          set -e
+          mkdir -p out
+          cp "$PROJECT"/app/build/outputs/apk/debug/app-debug.apk out/MercyLite.apk
+          cd out && sha256sum MercyLite.apk > MercyLite.apk.sha256
+          ls -lh
+
+      - name: Copy APK to the repo (direct download via Pages)
+        run: |
+          set -e
+          cp out/MercyLite.apk ./MercyLite.apk
+          git config user.name "actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add MercyLite.apk
+          git diff --cached --quiet || (git commit -m "publish MercyLite.apk" && git push)
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MercyLite-apk
+          path: out/MercyLite.apk
+          if-no-files-found: error
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.2.0
+          name: Mercy Lite 1.2.0 — small and fast
+          body: |
+            **Mercy Lite** — the small, fast build for everyday phones.
+
+            - One header, one search bar, tabs underneath
+            - Ad and tracker blocking, HTTPS-only, live search suggestions
+            - Clean new tab: eight shortcuts, no clutter
+            - ~65 KB download
+            - Search engine chooser in the address bar (Mercy, DuckDuckGo, Brave, Bing, Startpage, Ecosia)
+          files: |
+            out/MercyLite.apk
+            out/MercyLite.apk.sha256
