@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0c0e11">
+<title>Mercy GX — Android browser</title>
+<meta name="description" content="Mercy GX — a gaming browser for Android. Real browsing, gamehub new tab with five games, no ads, no tracking.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0d10; --surface:#14171c; --surface2:#1b1f26; --surface3:#232830;
+    --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.14);
+    --text:#e9ebee; --dim:#8d95a1; --dim2:#626b77;
+    --accent:#e08a3c; --accent-soft:rgba(224,138,60,.13); --accent-line:rgba(224,138,60,.34);
+    --teal:#3f9e8f;
+    --font:'Bricolage Grotesque',"Segoe UI",system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;font-family:var(--font);color:var(--text);background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(760px 420px at 16% -8%, rgba(224,138,60,.13), transparent 62%),
+      radial-gradient(700px 380px at 92% 4%, rgba(63,158,143,.07), transparent 60%);
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 18px}
+
+  /* top bar */
+  .top{display:flex;align-items:center;gap:10px;padding:14px 0;position:sticky;top:0;z-index:20;
+       background:rgba(11,13,16,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .mark{width:26px;height:26px;border-radius:8px;background:linear-gradient(150deg,var(--accent),#8a4a18);
+        display:grid;place-items:center;color:#1a1005;font-weight:700;font-size:13px;flex:0 0 auto}
+  .name{font-family:var(--mono);font-size:11px;letter-spacing:.2em}
+  .ver{font-family:var(--mono);font-size:9.5px;color:var(--dim2);border:1px solid var(--line);
+       border-radius:999px;padding:3px 8px;letter-spacing:.08em}
+  .topdl{margin-left:auto;background:var(--accent);color:#1b1105;font-weight:600;font-size:12.5px;
+         padding:8px 14px;border-radius:9px}
+
+  /* hero */
+  .hero{padding:34px 0 26px}
+  .kick{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--accent);
+        display:flex;align-items:center;gap:8px;margin-bottom:14px}
+  .kick i{width:18px;height:1px;background:var(--accent);display:block;opacity:.6}
+  h1{margin:0 0 12px;font-size:clamp(30px,7vw,54px);line-height:.98;letter-spacing:-.035em;font-weight:800}
+  .lede{margin:0 0 24px;color:var(--dim);font-size:15px;line-height:1.6;max-width:46ch}
+
+  .dl{display:block;background:var(--accent);color:#1b1105;border-radius:13px;padding:16px 20px;
+      text-align:center;font-weight:700;font-size:16px;box-shadow:0 18px 40px -24px rgba(224,138,60,.9);
+      transition:transform .15s,filter .15s}
+  .dl:active{transform:scale(.99)}
+  .dl small{display:block;font-family:var(--mono);font-size:10px;font-weight:400;opacity:.72;margin-top:5px;letter-spacing:.04em}
+  .dl2{display:block;text-align:center;margin-top:10px;font-family:var(--mono);font-size:11px;
+       color:var(--text);border:1px solid var(--line2);border-radius:11px;padding:12px;letter-spacing:.05em;
+       background:rgba(255,255,255,.02)}
+  .facts{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-family:var(--mono);
+         font-size:10px;color:var(--dim2);letter-spacing:.06em}
+  .facts b{color:var(--dim)}
+
+  /* phone mock */
+  .mock{margin:26px auto 0;max-width:330px;border:1px solid var(--line2);border-radius:22px;
+        overflow:hidden;background:var(--surface);box-shadow:0 40px 80px -46px #000}
+  .mbar{display:flex;align-items:center;gap:7px;padding:8px 9px;background:var(--surface2);border-bottom:1px solid var(--line)}
+  .mbar .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.12)}
+  .murl{flex:1;height:15px;border-radius:99px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+  .mbody{padding:12px}
+  .mhero{height:64px;border-radius:10px;background:linear-gradient(105deg,rgba(224,138,60,.24),rgba(63,158,143,.1));
+         border:1px solid var(--line);margin-bottom:10px}
+  .mtiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .mtile{aspect-ratio:16/11;border-radius:8px;background:var(--surface2);border:1px solid var(--line);position:relative}
+  .mtile:after{content:"";position:absolute;left:22%;right:22%;bottom:28%;height:3px;border-radius:2px;background:rgba(224,138,60,.5)}
+  .mtile:nth-child(2):after{background:rgba(63,158,143,.55)}
+  .mtile:nth-child(4):after{background:rgba(224,138,60,.28)}
+
+  section{padding:30px 0}
+  .label{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--dim2);
+         text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .label i{width:5px;height:5px;border-radius:50%;background:var(--accent);display:block}
+  h2{margin:0 0 8px;font-size:clamp(20px,4.4vw,28px);letter-spacing:-.02em}
+  .sub{margin:0 0 20px;color:var(--dim);font-size:13.5px;line-height:1.6;max-width:52ch}
+
+  .steps{display:flex;flex-direction:column;gap:10px;counter-reset:s}
+  .step{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 15px;position:relative;padding-left:46px}
+  .step:before{counter-increment:s;content:counter(s);position:absolute;left:14px;top:14px;width:22px;height:22px;
+               border-radius:7px;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);
+               font-family:var(--mono);font-size:11px;display:grid;place-items:center}
+  .step b{display:block;font-size:14px;margin-bottom:4px}
+  .step p{margin:0;font-size:12.5px;color:var(--dim);line-height:1.55}
+  .step code{font-family:var(--mono);font-size:11px;background:var(--surface3);border:1px solid var(--line);
+             border-radius:4px;padding:1px 5px;color:var(--text)}
+
+  .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .fcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .fcard b{display:block;font-size:13.5px;margin-bottom:5px}
+  .fcard p{margin:0;font-size:12px;color:var(--dim);line-height:1.55}
+  .fcard .tag{font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:var(--teal);
+              border:1px solid rgba(63,158,143,.3);border-radius:4px;padding:2px 5px;margin-left:6px}
+
+  .privacy{background:linear-gradient(120deg,rgba(63,158,143,.10),transparent 70%),var(--surface);
+           border:1px solid var(--line);border-radius:14px;padding:18px}
+  .privacy b{display:block;font-size:15px;margin-bottom:7px}
+  .privacy p{margin:0 0 12px;font-size:13px;color:var(--dim);line-height:1.6}
+  .privacy a{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+             color:var(--teal);border:1px solid rgba(63,158,143,.3);border-radius:8px;padding:8px 12px}
+
+  details{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:8px}
+  summary{cursor:pointer;font-size:13.5px;font-weight:600;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary:after{content:"+";float:right;color:var(--dim2);font-family:var(--mono)}
+  details[open] summary:after{content:"–"}
+  details p{margin:9px 0 0;font-size:12.5px;color:var(--dim);line-height:1.6}
+
+  .final{background:linear-gradient(120deg,rgba(224,138,60,.14),rgba(63,158,143,.05) 60%,transparent),var(--surface);
+         border:1px solid var(--line);border-radius:18px;padding:24px 20px;text-align:center;margin-top:8px}
+  .final h2{margin-bottom:8px}
+  .final p{margin:0 0 18px;color:var(--dim);font-size:13px;line-height:1.6}
+
+  footer{margin-top:26px;padding:18px 0 40px;border-top:1px solid var(--line);
+         font-family:var(--mono);font-size:10px;color:var(--dim2);letter-spacing:.05em;
+         display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  footer a{color:var(--dim)}
+  .note{display:none;margin-top:12px;font-size:11.5px;color:var(--dim2);line-height:1.5;
+        border:1px dashed var(--line2);border-radius:10px;padding:10px 12px}
+  .note.show{display:block}
+  @media (min-width:720px){
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center;padding:46px 0 34px}
+    .mock{margin:0}
+    .steps{flex-direction:row}
+    .step{flex:1;padding-left:15px;padding-top:44px}
+    .step:before{left:15px;top:14px}
+    .fgrid{grid-template-columns:repeat(3,1fr)}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="top">
+    <div class="mark">M</div>
+    <div class="name">MERCY&nbsp;GX</div>
+    <div class="ver" id="ver">v0.8.0</div>
+    <a class="topdl" id="topDl" href="#download">Download</a>
+  </div>
+
+  <div class="hero">
+    <div>
+      <div class="kick"><i></i>ANDROID BROWSER · 55 KB</div>
+      <h1>Phone par asli browser. Games ke saath.</h1>
+      <p class="lede">Mercy GX ek chhota sa browser hai — asli websites khulti hain, aur new tab par gamehub: 5 games, offline. Koi ads nahi, koi tracking nahi, koi account nahi.</p>
+
+      <a class="dl" id="dl" href="https://github.com/skoofficialll-hash/MERCY-GX-V.2/releases/latest/download/MercyGX.apk">
+        Download APK
+        <small id="dlMeta">v0.8.0 · 55 KB · Android 7+</small>
+      </a>
+      <a class="dl2" href="#install">Kaise install kare? →</a>
+
+      <div class="facts">
+        <span><b>55 KB</b> size</span>
+        <span><b>0</b> ads</span>
+        <span><b>0</b> trackers</span>
+        <span><b>5</b> games</span>
+      </div>
+      <div class="note" id="osNote">Ye build Android ke liye hai. iPhone par APK install nahi hota — PWA version use karo (Add to Home Screen).</div>
+    </div>
+
+    <div class="mock" aria-hidden="true">
+      <div class="mbar"><span class="dot"></span><span class="murl"></span><span class="dot"></span></div>
+      <div class="mbody">
+        <div class="mhero"></div>
+        <div class="mtiles"><div class="mtile"></div><div class="mtile"></div><div class="mtile"></div><div class="mtile"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <section id="install">
+    <div class="label"><i></i>Install</div>
+    <h2>Teen step, ek minute</h2>
+    <p class="sub">APK direct download hota hai — koi Play Store, koi login nahi.</p>
+    <div class="steps">
+      <div class="step"><b>Download dabao</b><p>Upar wala button — <code>MercyGX.apk</code> file seedha phone mein aayegi.</p></div>
+      <div class="step"><b>File kholo</b><p>Notification ya Files app → Downloads → APK par tap. Android poochega <code>Install unknown apps</code> — allow kar do.</p></div>
+      <div class="step"><b>Install</b><p>Play Protect warning aa sakti hai (self-signed build) — <code>Install anyway</code>. Phir app kholo.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="label"><i></i>Andar kya hai</div>
+    <h2>Chhota package, poora browser</h2>
+    <div class="fgrid">
+      <div class="fcard"><b>Asli browsing</b><p>Android ka WebView (Chromium) — koi bhi site khulti hai, jaise normal browser mein.</p></div>
+      <div class="fcard"><b>Address bar</b><p>URL type karo ya seedha sawaal — jo samajh aaye wahi kholta hai.</p></div>
+      <div class="fcard"><b>Gamehub new tab</b><p>Grid Runner, Brickfall, 2048, Memory Deck, Aim Lab — offline chalte hain.</p></div>
+      <div class="fcard"><b>Bookmarks + history</b><p>⋮ menu se — device par save, kabhi upload nahi.</p></div>
+      <div class="fcard"><b>Downloads</b><p>File download karne par phone ke Downloads folder mein chali jati hai.</p></div>
+      <div class="fcard"><b>Back / forward / home</b><p>Toolbar par ek tap — home se gamehub wapas.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="label"><i></i>Privacy</div>
+    <div class="privacy">
+      <b>Data tumhare phone mein rehta hai</b>
+      <p>History, bookmarks, game scores, settings — sab device par. Koi account nahi, koi analytics nahi, koi ads SDK nahi. "Clear browsing data" ek tap door hai.</p>
+      <a href="privacy.html">Poori privacy policy padho →</a>
+    </div>
+  </section>
+
+  <section>
+    <div class="label"><i></i>FAQ</div>
+    <h2>Common sawaal</h2>
+    <details open><summary>Play Protect warning kyun aati hai?</summary><p>Kyunki build self-signed hai (Play Store se nahi aayi). Source code tumhari hi repo mein public hai — chaaho to khud build kar lo. Warning par "Install anyway" dabana safe hai.</p></details>
+    <details><summary>Kitni jagah leta hai?</summary><p>APK 55 KB ka hai, install ke baad ~200 KB. 4 GB RAM wale phone par bhi aaram se chalta hai.</p></details>
+    <details><summary>Kya ye mera data kisi ko bhejta hai?</summary><p>Nahi. App ke andar koi network call sirf wahi hoti hai jo tumhari site load karne ke liye chahiye. Koi telemetry, koi crash reporting nahi.</p></details>
+    <details><summary>iPhone par kaise chalega?</summary><p>iPhone APK install nahi karta. iOS ke liye PWA version hai — Safari mein kholo aur "Add to Home Screen" karo.</p></details>
+    <details><summary>Update kaise aayega?</summary><p>Abhi manual: naya APK download karke upar se install kar do, data bacha rahega. Auto-update next version mein.</p></details>
+  </section>
+
+  <section id="download">
+    <div class="final">
+      <h2>Install karke dekho</h2>
+      <p>55 KB. Ek minute. Na pasand aaye to uninstall — kuch peeche nahi chhodta.</p>
+      <a class="dl" id="dl2" href="https://github.com/skoofficialll-hash/MERCY-GX-V.2/releases/latest/download/MercyGX.apk">
+        Download APK
+        <small>v0.8.0 · 55 KB · Android 7+</small>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <span>MERCY GX · built by Sk Inventor</span>
+    <span><a href="privacy.html">Privacy</a> · <a href="https://github.com/skoofficialll-hash/MERCY-GX-V.2">Source</a> · <a href="#top">Top</a></span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  // Android par hi APK ka matlab banta hai
+  var ua = navigator.userAgent || "";
+  var isAndroid = /Android/i.test(ua);
+  if(!isAndroid){
+    var n = document.getElementById("osNote");
+    if(n) n.classList.add("show");
+  }
+})();
+</script>
+</body>
+</html>
