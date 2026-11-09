@@ -1,0 +1,85 @@
+name: build-gecko
+
+# Mercy Pro — GeckoView (Firefox engine) browser.
+# Repo layout:  mercy_pro.zip  +  .github/workflows/build-gecko.yml
+# Actions -> build-gecko -> Run workflow
+#
+# The GeckoView version is resolved from Mozilla's Maven at build time, so this
+# workflow keeps working when Mozilla ships a new engine.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  gecko:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unzip the project
+        run: |
+          set -e
+          ZIP=$(find . -maxdepth 3 -name "*.zip" -not -path "./.git/*" | head -n 1)
+          if [ -z "$ZIP" ]; then echo "::error::mercy_pro.zip nahi mila"; exit 1; fi
+          mkdir -p _src
+          unzip -q -o "$ZIP" -d _src
+          P=$(dirname "$(find _src -maxdepth 4 -name settings.gradle | head -n 1)")
+          echo "PROJECT=$P" >> "$GITHUB_ENV"
+          echo "project: $P"
+
+      - name: Resolve the newest GeckoView version
+        run: |
+          set -e
+          META=https://maven.mozilla.org/maven2/org/mozilla/geckoview/geckoview/maven-metadata.xml
+          VER=$(curl -fsSL "$META" | grep -o '<release>[^<]*' | sed 's/<release>//')
+          [ -z "$VER" ] && VER=$(curl -fsSL "$META" | grep -o '<latest>[^<]*' | sed 's/<latest>//')
+          if [ -z "$VER" ]; then echo "::error::GeckoView version resolve nahi hua"; exit 1; fi
+          echo "GeckoView: $VER"
+          sed -i "s/GECKOVIEW_VERSION/$VER/" "$PROJECT/app/build.gradle"
+          grep -n geckoview "$PROJECT/app/build.gradle"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Build GeckoView APK
+        run: cd "$PROJECT" && gradle assembleDebug --no-daemon --stacktrace
+
+      - name: Collect APK
+        run: |
+          set -e
+          mkdir -p out
+          APK=$(find "$PROJECT" -path "*outputs/apk/debug/*.apk" | head -n 1)
+          cp "$APK" out/MercyPro.apk
+          cd out && sha256sum MercyPro.apk > MercyPro.apk.sha256
+          ls -lh
+          echo "MB: $(( $(stat -c%s MercyPro.apk) / 1048576 ))"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MercyPro-apk
+          path: out/MercyPro.apk
+          if-no-files-found: error
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v2.0.0-pro
+          name: Mercy Pro 2.0 — GeckoView engine
+          body: |
+            **Mercy Pro** — the big build, for phones with 4 GB RAM or more.
+
+            - Engine: **GeckoView** (the engine Firefox for Android uses)
+            - Tabs, engine-level content blocking, history
+            - arm64 only, so the download stays manageable
+            - For low-end phones use **Mercy Lite** instead
+          files: |
+            out/MercyPro.apk
+            out/MercyPro.apk.sha256
