@@ -82,8 +82,8 @@ jobs:
 
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: v2.2.2-pro
-          name: Mercy Pro 2.2.2 — GeckoView engine
+          tag_name: v2.2.3-pro
+          name: Mercy Pro 2.2.3 — GeckoView engine
           body: |
             **Mercy Pro** — the big build, for phones with 4 GB RAM or more.
 
