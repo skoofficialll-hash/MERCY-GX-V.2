@@ -35,8 +35,10 @@ jobs:
         run: |
           set -e
           META=https://maven.mozilla.org/maven2/org/mozilla/geckoview/geckoview/maven-metadata.xml
-          VER=$(curl -fsSL "$META" | grep -o '<release>[^<]*' | sed 's/<release>//')
-          [ -z "$VER" ] && VER=$(curl -fsSL "$META" | grep -o '<latest>[^<]*' | sed 's/<latest>//')
+          # newest engine that still builds against compileSdk 35 (newer ones need
+          # compileSdk 37 + AGP 9.1, which is not stable yet)
+          VER=$(curl -fsSL "$META" | grep -o '<version>[^<]*' | sed 's/<version>//' \
+                | awk -F. '$1<=135' | tail -n 1)
           if [ -z "$VER" ]; then echo "::error::GeckoView version resolve nahi hua"; exit 1; fi
           echo "GeckoView: $VER"
           sed -i "s/GECKOVIEW_VERSION/$VER/" "$PROJECT/app/build.gradle"
@@ -49,7 +51,7 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.7'
+          gradle-version: '8.9'
 
       - name: Build GeckoView APK
         run: cd "$PROJECT" && gradle assembleDebug --no-daemon --stacktrace
