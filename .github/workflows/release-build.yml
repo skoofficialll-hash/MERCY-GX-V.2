@@ -38,6 +38,26 @@ jobs:
           mkdir -p _src && unzip -q -o "${{ matrix.zip }}" -d _src
           test -f "_src/${{ matrix.project }}/app/build.gradle"
 
+
+      - name: Resolve the GeckoView version
+        if: matrix.app == 'pro'
+        run: |
+          set -e
+          META=https://maven.mozilla.org/maven2/org/mozilla/geckoview/geckoview/maven-metadata.xml
+          # newest engine that still builds against compileSdk 35
+          VER=$(curl -fsSL "$META" | grep -o '<version>[^<]*' | sed 's/<version>//' \
+                | awk -F. '$1<=135' | tail -n 1)
+          if [ -z "$VER" ]; then echo "::error::could not resolve a GeckoView version"; exit 1; fi
+          echo "GeckoView $VER"
+          sed -i "s/GECKOVIEW_VERSION/$VER/" "_src/${{ matrix.project }}/app/build.gradle"
+          grep -n geckoview "_src/${{ matrix.project }}/app/build.gradle"
+
+      - name: Clean duplicate resources
+        if: matrix.app == 'pro'
+        run: |
+          set -e
+          find "_src/${{ matrix.project }}/app/src/main/res" -name "ic_launcher_foreground.xml" -delete || true
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
