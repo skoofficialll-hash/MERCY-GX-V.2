@@ -75,8 +75,8 @@ jobs:
 
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: v2.5.0
-          name: Mercy Lite 2.5.0 — small and fast
+          tag_name: v3.2.0
+          name: Mercy Lite 3.2.0 — small and fast
           body: |
             **Mercy Lite** — the small, fast build for everyday phones.
 
@@ -98,6 +98,8 @@ jobs:
             - Site rules: per-site JavaScript, images, desktop mode and blocking
             - Offline pages: save any page and read it without a connection
             - Hindi voice search and read-aloud (Hindi pages are spoken in Hindi)
+            - The header is now the HTML design, pixel for pixel
+            - Pull down from the top of a page to refresh
             - Search engine chooser in the address bar (Mercy, DuckDuckGo, Brave, Bing, Startpage, Ecosia)
           files: |
             out/MercyLite.apk
