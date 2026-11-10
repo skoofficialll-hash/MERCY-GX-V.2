@@ -78,7 +78,7 @@ jobs:
 
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: v6.0.1
+          tag_name: v6.1.0
           name: Mercy Lite 3.6.0 — small and fast
           body: |
             **Mercy Lite** — the small, fast build for everyday phones.
