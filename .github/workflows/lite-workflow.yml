@@ -7,6 +7,9 @@ name: build-lite
 on:
   push:
     branches: [ main, master ]
+    paths:
+      - 'mercy_lite.zip'
+      - '.github/workflows/lite-workflow.yml'
   workflow_dispatch:
 
 permissions:

@@ -8,6 +8,11 @@ name: build-gecko
 # workflow keeps working when Mozilla ships a new engine.
 
 on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'mercy_pro.zip'
+      - '.github/workflows/pro-workflow.yml'
   workflow_dispatch:
 
 permissions:
