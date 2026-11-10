@@ -1,0 +1,122 @@
+name: release-build
+
+# Builds the signed release APK + AAB for both browsers and publishes them
+# as a GitHub release. Needs the four signing secrets added once by make-keystore.
+
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: "lite, pro or both"
+        default: "both"
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - app: lite
+            zip: mercy_lite.zip
+            project: mercy-lite
+            apk: MercyLite
+            pkg: com.skinventor.mercygx
+          - app: pro
+            zip: mercy_pro.zip
+            project: mercy-pro
+            apk: MercyPro
+            pkg: com.skinventor.mercypro
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Skip if not requested
+        id: gate
+        run: |
+          WANT="${{ github.event.inputs.app }}"
+          if [ -z "$WANT" ] || [ "$WANT" = "both" ] || [ "$WANT" = "${{ matrix.app }}" ]; then
+            echo "run=yes" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=no" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Unpack the sources
+        if: steps.gate.outputs.run == 'yes'
+        run: |
+          set -e
+          mkdir -p _src && unzip -q -o "${{ matrix.zip }}" -d _src
+          test -f "_src/${{ matrix.project }}/app/build.gradle"
+
+      - name: Set up JDK 17
+        if: steps.gate.outputs.run == 'yes'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Android SDK
+        if: steps.gate.outputs.run == 'yes'
+        uses: android-actions/setup-android@v3
+
+      - name: Decode the keystore
+        if: steps.gate.outputs.run == 'yes'
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          set -e
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::error::KEYSTORE_BASE64 is missing. Run make-keystore first."
+            exit 1
+          fi
+          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/mercy-release.jks"
+
+      - name: Build signed release
+        if: steps.gate.outputs.run == 'yes'
+        working-directory: _src/${{ matrix.project }}
+        env:
+          KEYSTORE_FILE: ${{ runner.temp }}/mercy-release.jks
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          set -e
+          gradle --no-daemon assembleRelease bundleRelease
+          VERSION=$(grep -o 'versionName "[^"]*"' app/build.gradle | cut -d'"' -f2)
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          APK=$(find app/build/outputs/apk/release -name "*.apk" | head -1)
+          AAB=$(find app/build/outputs/bundle/release -name "*.aab" | head -1)
+          cp "$APK" "../../${{ matrix.apk }}-${VERSION}.apk"
+          cp "$AAB" "../../${{ matrix.apk }}-${VERSION}.aab"
+          cd ../..
+          sha256sum "${{ matrix.apk }}-${VERSION}.apk" > "${{ matrix.apk }}-${VERSION}.apk.sha256"
+          cat "${{ matrix.apk }}-${VERSION}.apk.sha256"
+
+      - name: Verify the signature
+        if: steps.gate.outputs.run == 'yes'
+        run: |
+          set -e
+          BT=$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)
+          "$ANDROID_HOME/build-tools/$BT/apksigner" verify --print-certs "${{ matrix.apk }}-${VERSION}.apk"
+
+      - name: Publish the release
+        if: steps.gate.outputs.run == 'yes'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.VERSION }}-${{ matrix.app }}
+          name: "Mercy ${{ matrix.app }} ${{ env.VERSION }}"
+          body: |
+            Signed release build.
+
+            Version: ${{ env.VERSION }}
+            Package: ${{ matrix.pkg }}
+            APK and AAB, plus the sha256 of the APK.
+          files: |
+            ${{ matrix.apk }}-${{ env.VERSION }}.apk
+            ${{ matrix.apk }}-${{ env.VERSION }}.apk.sha256
+            ${{ matrix.apk }}-${{ env.VERSION }}.aab

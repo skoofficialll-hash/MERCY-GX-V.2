@@ -78,8 +78,8 @@ jobs:
 
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: v5.0.1
-          name: Mercy Lite 5.0.1 — small and fast
+          tag_name: v5.6.0
+          name: Mercy Lite 3.6.0 — small and fast
           body: |
             **Mercy Lite** — the small, fast build for everyday phones.
 
@@ -107,19 +107,6 @@ jobs:
             - Search bar sits at the very top; the three dots open the app menu
             - Home screen with first-run setup: currency, data rate, voice, security
             - Crash safety: on-device log, safe mode, dead-tab recovery
-            - B3 header with the live cost line, H4 week-view home, M1 grouped menu
-            - Neon purple accent, absolute-black layers, 5-step type scale
-            - Hidden tabs freeze after 5 minutes and wake exactly where they were
-            - Free memory and background-data shortcuts that really work
-            - Lite shows no Pro teasers: nothing locked, nothing greyed out
-            - Panic wipe: hold the skull to erase everything and close
-            - Header height fixed so the pill is never clipped
-            - Home: quick rail, data streak, link cost estimate, proof on first open
-            - 21:00 daily summary notification (one a day, off by default until allowed)
-            - Fixed: the header could scroll away; it is now pinned at a fixed height
-            - Panic wipe moved into the menu with the other options
-            - New header: budget ring, one row, no tab strip (tabs behind the counter)
-            - Menu redesign: ring on top, grouped rows, panic wipe last in red
             - Search engine chooser in the address bar (Mercy, DuckDuckGo, Brave, Bing, Startpage, Ecosia)
           files: |
             out/MercyLite.apk
