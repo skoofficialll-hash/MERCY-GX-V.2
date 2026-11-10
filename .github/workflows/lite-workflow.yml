@@ -78,8 +78,8 @@ jobs:
 
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: v4.0.2
-          name: Mercy Lite 4.0.2 — small and fast
+          tag_name: v4.2.3
+          name: Mercy Lite 4.2.3 — small and fast
           body: |
             **Mercy Lite** — the small, fast build for everyday phones.
 
@@ -108,7 +108,13 @@ jobs:
             - Home screen with first-run setup: currency, data rate, voice, security
             - Crash safety: on-device log, safe mode, dead-tab recovery
             - B3 header with the live cost line, H4 week-view home, M1 grouped menu
+            - Neon purple accent, absolute-black layers, 5-step type scale
+            - Hidden tabs freeze after 5 minutes and wake exactly where they were
+            - Free memory and background-data shortcuts that really work
+            - Lite shows no Pro teasers: nothing locked, nothing greyed out
             - Search engine chooser in the address bar (Mercy, DuckDuckGo, Brave, Bing, Startpage, Ecosia)
           files: |
             out/MercyLite.apk
             out/MercyLite.apk.sha256
+
+<!-- republished 2026-11-10 -->
