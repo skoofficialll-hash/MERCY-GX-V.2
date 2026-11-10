@@ -78,8 +78,8 @@ jobs:
 
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: v3.6.0
-          name: Mercy Lite 3.6.0 — small and fast
+          tag_name: v4.0.0
+          name: Mercy Lite 4.0.0 — small and fast
           body: |
             **Mercy Lite** — the small, fast build for everyday phones.
 
@@ -107,6 +107,7 @@ jobs:
             - Search bar sits at the very top; the three dots open the app menu
             - Home screen with first-run setup: currency, data rate, voice, security
             - Crash safety: on-device log, safe mode, dead-tab recovery
+            - B3 header with the live cost line, H4 week-view home, M1 grouped menu
             - Search engine chooser in the address bar (Mercy, DuckDuckGo, Brave, Bing, Startpage, Ecosia)
           files: |
             out/MercyLite.apk
