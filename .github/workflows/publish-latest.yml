@@ -1,0 +1,106 @@
+name: publish-latest
+
+# Whenever a signed release is published, this copies the APK to the repo root so
+# GitHub Pages always serves the newest build, and writes latest.json for the app
+# and the site to read.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-latest
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Work out which app this release is for
+        id: which
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          TAG="${{ github.event.release.tag_name }}"
+          if [ -z "$TAG" ]; then
+            # manual run: use the newest release
+            TAG=$(gh release list --limit 1 --json tagName --jq '.[0].tagName')
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          case "$TAG" in
+            *-lite) echo "app=lite" >> "$GITHUB_OUTPUT"; echo "file=MercyLite.apk" >> "$GITHUB_OUTPUT" ;;
+            *-pro)  echo "app=pro"  >> "$GITHUB_OUTPUT"; echo "file=MercyPro.apk"  >> "$GITHUB_OUTPUT" ;;
+            *)      echo "app=none" >> "$GITHUB_OUTPUT" ;;
+          esac
+          echo "release tag: $TAG"
+
+      - name: Take the APK from the release
+        if: steps.which.outputs.app != 'none'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          mkdir -p _dl
+          gh release download "${{ steps.which.outputs.tag }}" --dir _dl --pattern "*.apk" --pattern "*.sha256"
+          ls -l _dl
+          APK=$(ls _dl/*.apk | head -1)
+          cp "$APK" "${{ steps.which.outputs.file }}"
+          sha256sum "${{ steps.which.outputs.file }}" > "${{ steps.which.outputs.file }}.sha256"
+          cat "${{ steps.which.outputs.file }}.sha256"
+
+      - name: Write latest.json
+        if: steps.which.outputs.app != 'none'
+        run: |
+          set -e
+          python3 - <<'PY'
+          import json, os, hashlib, subprocess, pathlib
+          app = "${{ steps.which.outputs.app }}"
+          tag = "${{ steps.which.outputs.tag }}"
+          f = "${{ steps.which.outputs.file }}"
+          data = pathlib.Path(f).read_bytes()
+          info = {
+              "app": app,
+              "tag": tag,
+              "file": f,
+              "bytes": len(data),
+              "sha256": hashlib.sha256(data).hexdigest(),
+              "release": f"https://github.com/${{ github.repository }}/releases/tag/{tag}",
+              "download": f"https://github.com/${{ github.repository }}/releases/download/{tag}/" +
+                          [a for a in os.listdir("_dl") if a.endswith(".apk")][0],
+          }
+          path = pathlib.Path("latest.json")
+          all_info = {}
+          if path.exists():
+              try: all_info = json.loads(path.read_text())
+              except Exception: all_info = {}
+          all_info[app] = info
+          path.write_text(json.dumps(all_info, indent=2) + "\n")
+          print(path.read_text())
+          PY
+
+      - name: Commit and push
+        if: steps.which.outputs.app != 'none'
+        run: |
+          set -e
+          git config user.name  "mercy-bot"
+          git config user.email "mercy-bot@users.noreply.github.com"
+          git add -A "${{ steps.which.outputs.file }}" "${{ steps.which.outputs.file }}.sha256" latest.json
+          if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
+          git commit -m "publish ${{ steps.which.outputs.tag }} to the site"
+          for i in 1 2 3; do
+            if git push; then echo "pushed"; exit 0; fi
+            echo "push rejected, rebasing (attempt $i)"
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME:-main}" || true
+            sleep 3
+          done
+          echo "::error::could not push after three attempts"
+          exit 1
