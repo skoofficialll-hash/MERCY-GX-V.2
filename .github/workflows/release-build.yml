@@ -5,9 +5,13 @@ name: release-build
 
 on:
   workflow_dispatch:
+  # one upload of either zip produces a signed build, no manual step
   push:
     tags:
       - "v*"
+    paths:
+      - "mercy_lite.zip"
+      - "mercy_pro.zip"
 
 permissions:
   contents: write
